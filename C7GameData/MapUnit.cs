@@ -53,6 +53,10 @@ namespace C7GameData {
 			return isFortified || (path != null && path.PathLength() > 0);
 		}
 
+		public bool IsLandUnit() {
+			return this.unitType.categories.Contains("Land");
+		}
+
 		public override string ToString() {
 			if (this != MapUnit.NONE) {
 				return this.owner + " " + unitType.name + "at (" + location.xCoordinate + ", " + location.yCoordinate + ") with " + movementPoints.getMixedNumber() + " MP and " + hitPointsRemaining + " HP, id = " + id;

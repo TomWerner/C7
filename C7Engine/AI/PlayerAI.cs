@@ -84,7 +84,7 @@ namespace C7Engine
 						log.Information("Set AI for unit to JOIN_CITY due to lack of locations to settle");
 					}
 					else {
-						PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm();
+						PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm(unit.IsLandUnit());
 						settlerAiData.pathToDestination = algorithm.PathFrom(unit.location, settlerAiData.destination);
 						log.Information("Set AI for unit to BUILD_CITY with destination of " + settlerAiData.destination);
 					}
@@ -170,7 +170,7 @@ namespace C7Engine
 						newUnitAIData.destination = nearestCityToDefend.location;
 						newUnitAIData.goal = DefenderAIData.DefenderGoal.DEFEND_CITY;
 
-						PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm();
+						PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm(unit.IsLandUnit());
 						newUnitAIData.pathToDestination = algorithm.PathFrom(unit.location, newUnitAIData.destination);
 
 						log.Information($"Unit {unit} tasked with defending {nearestCityToDefend.name}");
@@ -201,7 +201,7 @@ namespace C7Engine
 			if (closestBarbDistance <= 3) {
 				CombatAIData caid = new CombatAIData();
 
-				PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm();
+				PathingAlgorithm algorithm = PathingAlgorithmChooser.GetAlgorithm(unit.IsLandUnit());
 				caid.path = algorithm.PathFrom(unit.location, closestBarbCamp);
 				unit.currentAIData = caid;
 				return true;

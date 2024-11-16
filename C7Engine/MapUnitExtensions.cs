@@ -388,7 +388,7 @@ namespace C7Engine {
 		}
 
 		public static void setUnitPath(this MapUnit unit, Tile dest) {
-			unit.path = PathingAlgorithmChooser.GetAlgorithm().PathFrom(unit.location, dest);
+			unit.path = PathingAlgorithmChooser.GetAlgorithm(unit.IsLandUnit()).PathFrom(unit.location, dest);
 			if (unit.path == TilePath.NONE) {
 				log.Warning("Cannot move unit to " + dest + ", path is NONE!");
 			}

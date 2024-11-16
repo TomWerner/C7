@@ -7,11 +7,12 @@ namespace C7Engine.Pathing
 	 */
 	public class PathingAlgorithmChooser
 	{
-		private static PathingAlgorithm theAlgorithm = new DijkstrasAlgorithm(new WalkerOnLand());
+		private static PathingAlgorithm landAlgorithm = new DijkstrasAlgorithm(new WalkerOnLand());
+		private static PathingAlgorithm waterAlgorithm = new DijkstrasAlgorithm(new WalkerOnWater());
 
-		public static PathingAlgorithm GetAlgorithm()
+		public static PathingAlgorithm GetAlgorithm(bool isLandUnit)
 		{
-			return theAlgorithm;
+			return isLandUnit ? landAlgorithm : waterAlgorithm;
 		}
 	}
 }
