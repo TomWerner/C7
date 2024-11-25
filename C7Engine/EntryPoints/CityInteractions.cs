@@ -32,7 +32,6 @@ namespace C7Engine
 			tile.cityAtTile.owner.cities.Remove(tile.cityAtTile);
 			EngineStorage.gameData.cities.Remove(tile.cityAtTile);
 			tile.cityAtTile = null;
-			tile.overlays.road = false;
 		}
 	}
 }
