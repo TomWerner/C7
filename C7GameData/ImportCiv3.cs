@@ -251,7 +251,10 @@ namespace C7GameData {
 
 			foreach (SaveUnit unit in save.Units) {
 				playerLookup[unit.owner].tileKnowledge.Add(unit.currentLocation);
-				// unit.
+				foreach (TileDirection direction in Enum.GetValues(typeof(TileDirection))) {
+					Tuple<int, int> neighbor = Tile.NeighborCoordinate(unit.currentLocation.x, unit.currentLocation.y, direction);
+					playerLookup[unit.owner].tileKnowledge.Add(new TileLocation(neighbor.Item1, neighbor.Item2));
+				}
 			}
 
 			// This probably doesn't belong here, but not sure where else to put it

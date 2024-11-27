@@ -19,7 +19,7 @@ namespace C7.Map {
 			TileKnowledge tileKnowledge = gameData.GetHumanPlayers()[0].tileKnowledge;
 			//N.B. FogOfWar.pcx handles both totally unknown and fogged tiles, indexed in the same file.
 			//Hence the trinary math rather than the more commonplace binary.
-			if (!tileKnowledge.isTileKnown(tile) || true) {
+			if (!tileKnowledge.isTileKnown(tile)) {
 				int sum = 0;
 				if (tileKnowledge.isTileKnown(tile.neighbors[TileDirection.NORTH]) || tileKnowledge.isTileKnown(tile.neighbors[TileDirection.NORTHWEST]) || tileKnowledge.isTileKnown(tile.neighbors[TileDirection.NORTHEAST]))
 					sum += 1 * 2;

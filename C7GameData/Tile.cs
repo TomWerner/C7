@@ -4,6 +4,7 @@ namespace C7GameData
 	using System.Text.Json.Serialization;
 	using System.Collections.Generic;
 	using System.Linq;
+
 	public class Tile
 	{
 		public ID Id {get; internal set;}
@@ -72,6 +73,40 @@ namespace C7GameData
 			xCoordinate = -1,
 			yCoordinate = -1,
 		};
+
+		public static Tuple<int, int> NeighborCoordinate(int x, int y, TileDirection direction) {
+			switch (direction) {
+				case TileDirection.NORTH:
+					y-=2;
+					break;
+				case TileDirection.NORTHEAST:
+					y--;
+					x++;
+					break;
+				case TileDirection.EAST:
+					x+=2;
+					break;
+				case TileDirection.SOUTHEAST:
+					y++;
+					x++;
+					break;
+				case TileDirection.SOUTH:
+					y+=2;
+					break;
+				case TileDirection.SOUTHWEST:
+					y++;
+					x--;
+					break;
+				case TileDirection.WEST:
+					x-=2;
+					break;
+				case TileDirection.NORTHWEST:
+					x--;
+					y--;
+					break;
+			}
+			return Tuple.Create(x, y);
+		}
 
 		//This should be used when we want to check if land tiles are next to water tiles.
 		//Usually this is coast, but it could be Sea - see the "Deepwater Harbours" topics at CFC.
