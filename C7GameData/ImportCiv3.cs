@@ -163,6 +163,8 @@ namespace C7GameData {
 
 			ImportSharedBiqData();
 			ImportBicLeaders();
+			ImportBicUnits();
+			ImportBiqCities();
 
 			Dictionary<int, Resource> resourcesByIndex = ImportCiv3Resources();
 			SetMapDimensions(biq, save);
@@ -185,7 +187,6 @@ namespace C7GameData {
 					baseTerrain = save.TerrainTypes[civ3Tile.BaseTerrain].Key,
 					overlayTerrain = save.TerrainTypes[civ3Tile.OverlayTerrain].Key,
 				};
-				Console.WriteLine(x + " , " + y + " , " + tile);
 				if (civ3Tile.BonusGrassland) {
 					tile.features.Add("bonusShield");
 				}
@@ -230,8 +231,29 @@ namespace C7GameData {
 					tile.resource = tileResource.Key;
 				}
 				save.Map.tiles.Add(tile);
+
+				// Some tiles are known ahead of time, like all of europe in age of
+				// discovery. Add those tiles ahead of time.
+				for (int playerIndex = 0; playerIndex < save.Players.Count; playerIndex++) {
+					if (civ3Tile.FogOfWar != 0) {
+						SavePlayer player = save.Players[playerIndex];
+						player.tileKnowledge.Add(new TileLocation(x, y));
+					}
+				}
 				i++;
 			}
+
+			// The rest of the fog of war is done unit by unit.
+			Dictionary<ID, SavePlayer> playerLookup = new();
+			foreach (SavePlayer player in save.Players) {
+				playerLookup[player.id] = player;
+			}
+
+			foreach (SaveUnit unit in save.Units) {
+				playerLookup[unit.owner].tileKnowledge.Add(unit.currentLocation);
+				// unit.
+			}
+
 			// This probably doesn't belong here, but not sure where else to put it
 			// c7Save.GameData.map.RelativeModPath = civ3Save.MediaBic.Game[0].ScenarioSearchFolders;
 			return save;
@@ -303,7 +325,7 @@ namespace C7GameData {
 
 			int i = 0;
 			foreach (LEAD leader in theBiq.Lead) {
-				Console.WriteLine(leader.Name);
+				Console.WriteLine("Leader name: " + leader.Name);
 				Civilization civ = save.Civilizations[i];
 				save.Players.Add(new SavePlayer{
 					id = ids.CreateID("player"),
@@ -362,6 +384,54 @@ namespace C7GameData {
 					saveUnit.action = "fortified";
 				}
 				save.Units.Add(saveUnit);
+			}
+		}
+
+		private void ImportBicUnits() {
+			BiqData theBiq = biq.Unit is null ? defaultBiq : biq;
+
+			foreach (UNIT unit in theBiq.Unit) {
+				if (unit.Owner < 0 || unit.Owner >= save.Players.Count) {
+					continue;
+				}
+				Console.WriteLine(unit.Owner + ", " + unit.Name + ", " + unit.X + ", " + unit.Y);
+				SavePlayer player = save.Players[unit.Owner];
+				PRTO prototype = theBiq.Prto[unit.UnitType];
+				ExperienceLevel experience = save.ExperienceLevels[unit.ExperienceLevel];
+				SaveUnit saveUnit = new SaveUnit{
+					id = ids.CreateID(prototype.Name),
+					owner = player.id,
+					prototype = prototype.Name,
+					currentLocation = new TileLocation(unit.X, unit.Y),
+					previousLocation = new TileLocation(unit.X, unit.Y),
+					experience = experience.key,
+					hitPointsRemaining = experience.baseHitPoints, // TODO: include bonus hitpoints from unit type
+					movePointsRemaining = (float)prototype.Movement,
+				};
+				save.Units.Add(saveUnit);
+			}
+		}
+
+		private void ImportBiqCities() {
+			BiqData theBiq = biq.Unit is null ? defaultBiq : biq;
+
+			foreach (CITY city in theBiq.City) {
+				Console.WriteLine(city.Name + ", " +city.Owner + ", " + save.Players.Count());
+				SavePlayer owner = save.Players[city.Owner];
+				SaveCity saveCity = new SaveCity{
+					id = ids.CreateID("city"),
+					owner = owner.id,
+					location = new TileLocation(city.X, city.Y),
+					// producible = city.Constructing // TODO: lookup building or unit prototype
+					producible = "Warrior",
+					name = city.Name,
+					size = city.Size,
+					shieldsStored = 0,
+					foodStored = 0,
+					foodNeededToGrow = 20, // HACK: don't know where to find this
+					// residents = city.Ppod // TODO: load tiles worked from PPOD
+				};
+				save.Cities.Add(saveCity);
 			}
 		}
 

@@ -80,7 +80,6 @@ public partial class Game : Node2D {
 
 			controller = CreateGame.createGame(Global.LoadGamePath, Global.DefaultBicPath); // Spawns engine thread
 			Global.ResetLoadGamePath();
-
 			using (var gameDataAccess = new UIGameDataAccess()) {
 				GameMap map = gameDataAccess.gameData.map;
 				Util.setModPath(gameDataAccess.gameData.scenarioSearchPath);

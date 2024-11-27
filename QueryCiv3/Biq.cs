@@ -290,6 +290,7 @@ namespace QueryCiv3 {
 							}
 							break;
 						case "LEAD":
+						Console.WriteLine("Lead count: " + count);
 							dataLength = 0;
 							Lead = new LEAD[count];
 							LeadPrto = new LEAD_Unit[count][];
