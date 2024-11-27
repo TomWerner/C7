@@ -48,7 +48,7 @@ namespace C7GameData {
 			save.HealRates["neutral_field"] = 1;
 			save.HealRates["hostile_field"] = 0;
 			save.HealRates["city"] = 2;
-			// save.ScenarioSearchPath = biq?.Game[0].ScenarioSearchFolders;
+			save.ScenarioSearchPath = biq?.Game[0].ScenarioSearchFolders;
 			ImportBarbarianInfo();
 		}
 
@@ -162,6 +162,8 @@ namespace C7GameData {
 			defaultBiq = BiqData.LoadFile(defaultBiqPath);
 
 			ImportSharedBiqData();
+			ImportBicLeaders();
+
 			Dictionary<int, Resource> resourcesByIndex = ImportCiv3Resources();
 			SetMapDimensions(biq, save);
 			SetWorldWrap(biq, save);
@@ -170,12 +172,20 @@ namespace C7GameData {
 			int i = 0;
 			foreach (QueryCiv3.Biq.TILE civ3Tile in biq.Tile) {
 				(int x, int y) = GetMapCoordinates(i, biq.Wmap[0].Width);
+				Civ3ExtraInfo extra = new Civ3ExtraInfo
+				{
+					BaseTerrainFileID = civ3Tile.TextureFile,
+					BaseTerrainImageID = civ3Tile.TextureLocation,
+				};
 				SaveTile tile = new SaveTile{
+					id = ids.CreateID("tile"),
+					extraInfo = extra,
 					x = x,
 					y = y,
 					baseTerrain = save.TerrainTypes[civ3Tile.BaseTerrain].Key,
 					overlayTerrain = save.TerrainTypes[civ3Tile.OverlayTerrain].Key,
 				};
+				Console.WriteLine(x + " , " + y + " , " + tile);
 				if (civ3Tile.BonusGrassland) {
 					tile.features.Add("bonusShield");
 				}
@@ -279,6 +289,7 @@ namespace C7GameData {
 					leaderGender = race.LeaderGender == 0 ? Gender.Male : Gender.Female,
 					color = race.DefaultColor,
 				};
+				Console.WriteLine(civ.name);
 				foreach (RACE_City city in theBiq.RaceCityName[i]) {
 					civ.cityNames.Add(city.Name);
 				}
@@ -287,10 +298,32 @@ namespace C7GameData {
 			}
 		}
 
+		private void ImportBicLeaders() {
+			BiqData theBiq = biq.Race is null ? defaultBiq : biq;
+
+			int i = 0;
+			foreach (LEAD leader in theBiq.Lead) {
+				Console.WriteLine(leader.Name);
+				Civilization civ = save.Civilizations[i];
+				save.Players.Add(new SavePlayer{
+					id = ids.CreateID("player"),
+					color = (uint)civ.color,
+					barbarian = i == 0,
+					human = i == 1,
+					civilization = civ.name,
+					hasPlayedCurrentTurn = false, // TODO: find how this information is stored in a .sav
+					cityNameIndex = 0,
+				});
+				i++;
+			}
+		}
+
 		private void ImportSavLeaders() {
 			int i = 0;
 			foreach (QueryCiv3.Sav.LEAD leader in savData.Lead) {
+				Console.WriteLine(leader.ToString());
 				if (leader.RaceID == -1) {
+					Console.WriteLine("ere'?");
 					continue; // can probably break here
 				}
 				Civilization civ = save.Civilizations[leader.RaceID];

@@ -89,6 +89,7 @@ public partial class TerrainLayer : LooseLayer {
 
 	public override void drawObject(LooseView looseView, GameData gameData, Tile tile, Vector2 tileCenter)
 	{
+		Console.WriteLine("??");
 		tilesToDraw.Add(new TileToDraw(tile, tileCenter));
 		tilesToDraw.Add(new TileToDraw(tile.neighbors[TileDirection.SOUTH], tileCenter + new Vector2(0, 64)));
 		tilesToDraw.Add(new TileToDraw(tile.neighbors[TileDirection.SOUTHWEST], tileCenter + new Vector2(-64, 32)));

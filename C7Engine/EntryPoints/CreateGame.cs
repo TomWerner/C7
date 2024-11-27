@@ -24,6 +24,8 @@ namespace C7Engine
 
 			EngineStorage.gameData = gameData;
 
+			Console.WriteLine(gameData.ToString());
+
 			// TODO: (pcen) initially, in the false branch I assigned gameData.CreateDummyGameData
 			// to humanPlayer, but this is not correct since there are already players and units in
 			// the .sav - instead, we should remove CreateDummyGameData and implement simple save
