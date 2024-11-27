@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace C7GameData.Save {
@@ -39,6 +40,10 @@ namespace C7GameData.Save {
 		}
 
 		public City ToCity(GameMap gameMap, List<Player> players, List<UnitPrototype> unitPrototypes, List<Civilization> civilizations) {
+			foreach (UnitPrototype up in unitPrototypes) {
+				Console.WriteLine(up.name);
+			}
+
 			City city = new City{
 				id = id,
 				location = gameMap.tileAt(location.x, location.y),

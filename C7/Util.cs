@@ -127,6 +127,7 @@ public partial class Util {
 	public static string Civ3MediaPath(string mediaPath) {
 		//First, check if the file exists via a scenario's mod path
 		//For now this is only checked relative to Civ3, not relative to C7.
+		Console.WriteLine(modPath + ", " + mediaPath);
 		if (!string.IsNullOrEmpty(modPath)) {
 			string[] paths = modPath.Split(";");
 			foreach (string path in paths) {

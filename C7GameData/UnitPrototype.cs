@@ -11,6 +11,7 @@ namespace C7GameData
 	public class UnitPrototype : IProducible
 	{
 		public string name { get; set; }
+		public string civilopediaEntry { get; set; }
 		public int shieldCost { get; set; }
 		public int populationCost { get; set; }
 		public int attack {get; set;}

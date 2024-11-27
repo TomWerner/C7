@@ -402,7 +402,7 @@ namespace C7GameData {
 				if (unit.Owner < 0 || unit.Owner >= save.Players.Count) {
 					continue;
 				}
-				Console.WriteLine(unit.Owner + ", " + unit.Name + ", " + unit.X + ", " + unit.Y);
+				Console.WriteLine(unit.Owner + ", " + unit.Name + ", " + unit.X + ", " + unit.Y + ", " + unit.UnitType);
 				SavePlayer player = save.Players[unit.Owner];
 				PRTO prototype = theBiq.Prto[unit.UnitType];
 				ExperienceLevel experience = save.ExperienceLevels[unit.ExperienceLevel];
@@ -431,13 +431,17 @@ namespace C7GameData {
 				Civilization civ = save.Civilizations[city.Owner];
 				SavePlayer owner = save.Players.Find(p => p.civilization == civ.name);
 
-				Console.WriteLine(city.Name + ", " +city.Owner + ", " + save.Players.Count());
+				Console.WriteLine(city.Name + ", " +owner.civilization + ", " + city.Size);
 				SaveCity saveCity = new SaveCity{
 					id = ids.CreateID("city"),
 					owner = owner.id,
 					location = new TileLocation(city.X, city.Y),
-					// producible = city.Constructing // TODO: lookup building or unit prototype
-					producible = "Warrior",
+					// All civs can build a worker.
+					//
+					// This should probably use the same city production AI logic
+					// as when a new city is built, but there's a circular dependency
+					// between this and the AI module.
+					producible = "Worker",
 					name = city.Name,
 					size = city.Size,
 					shieldsStored = 0,
@@ -481,6 +485,8 @@ namespace C7GameData {
 					prototype.categories.Add("Air");
 				}
 				prototype.name = prto.Name;
+				prototype.civilopediaEntry = prto.CivilopediaEntry;
+				Console.WriteLine(prototype.name + " , " + prototype.civilopediaEntry);
 				prototype.attack = prto.Attack;
 				prototype.defense = prto.Defense;
 				prototype.movement = prto.Movement;

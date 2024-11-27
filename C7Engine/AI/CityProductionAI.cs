@@ -12,7 +12,7 @@ namespace C7Engine
 	 * A simple AI for choosing what to produce next.
 	 * We probably will have a few variants of this, an interface, etc.
 	 * eventually.  For now, I just want to separate it out from the main
-	 * interaction events and make it clear that it's an AI component.
+	 * interaction events  and make it clear that it's an AI component.
 	 */
 	public class CityProductionAI
 	{
