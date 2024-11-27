@@ -243,7 +243,11 @@ namespace C7GameData {
 				i++;
 			}
 
-			// The rest of the fog of war is done unit by unit.
+			// The rest of the fog of war is done unit by unit; each unit can see their
+			// own tile and the neighbor tiles.
+			//
+			// This will eventually need to handle hills and other tiles that can see
+			// further.
 			Dictionary<ID, SavePlayer> playerLookup = new();
 			foreach (SavePlayer player in save.Players) {
 				playerLookup[player.id] = player;
@@ -314,7 +318,7 @@ namespace C7GameData {
 					leaderGender = race.LeaderGender == 0 ? Gender.Male : Gender.Female,
 					color = race.DefaultColor,
 				};
-				Console.WriteLine(civ.name);
+				Console.WriteLine(civ.name + ", " + civ.leader);
 				foreach (RACE_City city in theBiq.RaceCityName[i]) {
 					civ.cityNames.Add(city.Name);
 				}
@@ -327,9 +331,10 @@ namespace C7GameData {
 			BiqData theBiq = biq.Race is null ? defaultBiq : biq;
 
 			int i = 0;
-			foreach (LEAD leader in theBiq.Lead) {
-				Console.WriteLine("Leader name: " + leader.Name);
-				Civilization civ = save.Civilizations[i];
+			foreach (int playerIndex in theBiq.GameCiv[0]) {
+				Console.WriteLine("playerIndex:" + playerIndex);
+				Civilization civ = save.Civilizations[playerIndex];
+				Console.WriteLine("Civ: " + civ.name + ", " + civ.leader);
 				save.Players.Add(new SavePlayer{
 					id = ids.CreateID("player"),
 					color = (uint)civ.color,
@@ -419,8 +424,14 @@ namespace C7GameData {
 			BiqData theBiq = biq.Unit is null ? defaultBiq : biq;
 
 			foreach (CITY city in theBiq.City) {
+				// City owner is a player index, but these indices aren't always
+				// continuous, due to unplayable civs in some scenarios. We first
+				// get the civ name from the civ list, and then use that to find
+				// the correct player.
+				Civilization civ = save.Civilizations[city.Owner];
+				SavePlayer owner = save.Players.Find(p => p.civilization == civ.name);
+
 				Console.WriteLine(city.Name + ", " +city.Owner + ", " + save.Players.Count());
-				SavePlayer owner = save.Players[city.Owner];
 				SaveCity saveCity = new SaveCity{
 					id = ids.CreateID("city"),
 					owner = owner.id,

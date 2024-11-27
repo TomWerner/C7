@@ -18,6 +18,9 @@ namespace QueryCiv3.Biq
         public int HumanPlayer; // 0: no, 1: yes
 
         private fixed byte Text[32];
+
+		// Note: May be empty in some biq files. The leader name can be obtained
+		// from the "race" struct in those cases.
         public string Name { get => Util.GetString(ref this, 12, 32); }
 
         private fixed byte UnknownBuffer[8]; // Are we sure this buffer isn't just a continuation of the text?
