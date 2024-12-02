@@ -232,8 +232,8 @@ namespace C7GameData {
 
 				// Some tiles are known ahead of time, like all of europe in age of
 				// discovery. Add those tiles ahead of time.
-				for (int playerIndex = 0; playerIndex < save.Players.Count; playerIndex++) {
-					if (civ3Tile.FogOfWar != 0) {
+				if (civ3Tile.FogOfWar != 0) {
+					for (int playerIndex = 0; playerIndex < save.Players.Count; playerIndex++) {
 						SavePlayer player = save.Players[playerIndex];
 						player.tileKnowledge.Add(new TileLocation(x, y));
 					}
