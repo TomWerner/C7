@@ -162,6 +162,9 @@ namespace C7GameData {
 			defaultBiq = BiqData.LoadFile(defaultBiqPath);
 
 			ImportSharedBiqData();
+			ImportBicLeaders();
+			ImportBicUnits();
+
 			Dictionary<int, Resource> resourcesByIndex = ImportCiv3Resources();
 			SetMapDimensions(biq, save);
 			SetWorldWrap(biq, save);
@@ -170,7 +173,14 @@ namespace C7GameData {
 			int i = 0;
 			foreach (QueryCiv3.Biq.TILE civ3Tile in biq.Tile) {
 				(int x, int y) = GetMapCoordinates(i, biq.Wmap[0].Width);
+								Civ3ExtraInfo extra = new Civ3ExtraInfo
+				{
+					BaseTerrainFileID = civ3Tile.TextureFile,
+					BaseTerrainImageID = civ3Tile.TextureLocation,
+				};
 				SaveTile tile = new SaveTile{
+					id = ids.CreateID("tile"),
+					extraInfo = extra,
 					x = x,
 					y = y,
 					baseTerrain = save.TerrainTypes[civ3Tile.BaseTerrain].Key,
@@ -219,9 +229,39 @@ namespace C7GameData {
 				if (tileResource != Resource.NONE) {
 					tile.resource = tileResource.Key;
 				}
+
+				// Some tiles are known ahead of time, like all of europe in age of
+				// discovery. Add those tiles ahead of time.
+				for (int playerIndex = 0; playerIndex < save.Players.Count; playerIndex++) {
+					if (civ3Tile.FogOfWar != 0) {
+						SavePlayer player = save.Players[playerIndex];
+						player.tileKnowledge.Add(new TileLocation(x, y));
+					}
+				}
+
 				save.Map.tiles.Add(tile);
 				i++;
 			}
+
+			// The rest of the fog of war is done unit by unit; each unit can see their
+			// own tile and the neighbor tiles.
+			//
+			// This will eventually need to handle hills and other tiles that can see
+			// further.
+			Dictionary<ID, SavePlayer> playerLookup = new();
+			foreach (SavePlayer player in save.Players) {
+				playerLookup[player.id] = player;
+			}
+
+			foreach (SaveUnit unit in save.Units) {
+				SavePlayer player = playerLookup[unit.owner];
+				player.tileKnowledge.Add(unit.currentLocation);
+				foreach (TileDirection direction in Enum.GetValues(typeof(TileDirection))) {
+					Tuple<int, int> neighbor = Tile.NeighborCoordinate(unit.currentLocation.x, unit.currentLocation.y, direction);
+					player.tileKnowledge.Add(new TileLocation(neighbor.Item1, neighbor.Item2));
+				}
+			}
+
 			// This probably doesn't belong here, but not sure where else to put it
 			// c7Save.GameData.map.RelativeModPath = civ3Save.MediaBic.Game[0].ScenarioSearchFolders;
 			return save;
@@ -287,6 +327,19 @@ namespace C7GameData {
 			}
 		}
 
+		private void ImportBicLeaders() {
+			BiqData theBiq = biq.Race is null ? defaultBiq : biq;
+
+			int i = 0;
+			foreach (int playerIndex in theBiq.GameCiv[0]) {
+				Civilization civ = save.Civilizations[playerIndex];
+				// TODO: the city name index is wrong, we need to count the number of
+				// cities this civilization has.
+				save.Players.Add(MakeSavePlayerFromCiv(civ, /*isBarbarian=*/i == 0, /*isHuman=*/i == 1, /*cityNameIndex=*/0));
+				i++;
+			}
+		}
+
 		private void ImportSavLeaders() {
 			int i = 0;
 			foreach (QueryCiv3.Sav.LEAD leader in savData.Lead) {
@@ -294,17 +347,21 @@ namespace C7GameData {
 					continue; // can probably break here
 				}
 				Civilization civ = save.Civilizations[leader.RaceID];
-				save.Players.Add(new SavePlayer {
-					id = ids.CreateID("player"),
-					colorIndex = civ.colorIndex,
-					barbarian = i == 0,
-					human = i == 1,
-					civilization = civ.name,
-					hasPlayedCurrentTurn = false, // TODO: find how this information is stored in a .sav
-					cityNameIndex = leader.FoundedCities,
-				});
+				save.Players.Add(MakeSavePlayerFromCiv(civ, /*isBarbarian=*/i == 0, /*isHuman=*/i == 1, /*cityNameIndex=*/leader.FoundedCities));
 				i++;
 			}
+		}
+
+		private SavePlayer MakeSavePlayerFromCiv(Civilization civ, bool isBarbarian, bool isHuman, int cityNameIndex) {
+			return new SavePlayer {
+				id = ids.CreateID("player"),
+				colorIndex = civ.colorIndex,
+				barbarian = isBarbarian,
+				human = isHuman,
+				civilization = civ.name,
+				hasPlayedCurrentTurn = false, // TODO: find how this information is stored in a .sav
+				cityNameIndex = cityNameIndex,
+			};
 		}
 
 		private void ImportSavUnits() {
@@ -328,6 +385,30 @@ namespace C7GameData {
 				if (unit.Fortified) {
 					saveUnit.action = "fortified";
 				}
+				save.Units.Add(saveUnit);
+			}
+		}
+
+		private void ImportBicUnits() {
+			BiqData theBiq = biq.Unit is null ? defaultBiq : biq;
+
+			foreach (UNIT unit in theBiq.Unit) {
+				if (unit.Owner < 0 || unit.Owner >= save.Players.Count) {
+					continue;
+				}
+				SavePlayer player = save.Players[unit.Owner];
+				PRTO prototype = theBiq.Prto[unit.UnitType];
+				ExperienceLevel experience = save.ExperienceLevels[unit.ExperienceLevel];
+				SaveUnit saveUnit = new SaveUnit{
+					id = ids.CreateID(prototype.Name),
+					owner = player.id,
+					prototype = prototype.Name,
+					currentLocation = new TileLocation(unit.X, unit.Y),
+					previousLocation = new TileLocation(unit.X, unit.Y),
+					experience = experience.key,
+					hitPointsRemaining = experience.baseHitPoints, // TODO: include bonus hitpoints from unit type
+					movePointsRemaining = (float)prototype.Movement,
+				};
 				save.Units.Add(saveUnit);
 			}
 		}
