@@ -20,6 +20,9 @@ namespace C7GameData
 			this.name = name;
 		}
 		public string name;
+
+		// "Americans" for "America", or "Spanish" for "Spain".
+		public string noun;
 		public string leader;
 		public int colorIndex;
 		public Gender leaderGender;

@@ -315,6 +315,7 @@ namespace C7GameData {
 			foreach (RACE race in theBiq.Race) {
 				Civilization civ = new Civilization{
 					name = race.Name,
+					noun = race.Noun,
 					leader = race.LeaderName,
 					leaderGender = race.LeaderGender == 0 ? Gender.Male : Gender.Female,
 					colorIndex = race.DefaultColor,

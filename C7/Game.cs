@@ -171,6 +171,15 @@ public partial class Game : Node2D {
 					break;
 				case MsgCityDestroyed mCD:
 					mapView.cityLayer.UpdateAfterCityDestruction(mCD.city);
+
+					// If this was the last city of the civilization, display a popup
+					// noting that the civ is gone and destroy any remaining units.
+					if (mCD.city.owner.RemainingCities() == 0) {
+						popupOverlay.ShowPopup(new CivilizationDestroyed(mCD.city.owner.civilization), PopupOverlay.PopupCategory.Advisor);
+						for (int i =0; i < mCD.city.owner.units.Count; ++i) {
+							MapUnitExtensions.disband(mCD.city.owner.units[i]);
+						}
+					}
 					break;
 			}
 		}

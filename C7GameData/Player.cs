@@ -68,6 +68,17 @@ public class Player
 		return true;
 	}
 
+	public int RemainingCities() {
+		int result = 0;
+		foreach (City city in cities) {
+			// Destroyed cities have a size of zero.
+			if (city.size > 0) {
+				++result;
+			}
+		}
+		return result;
+	}
+
 	public override string ToString() {
 		if (civilization != null)
 			return civilization.cityNames.First();

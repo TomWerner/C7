@@ -58661,7 +58661,7 @@
       "facingDirection": "north",
       "experience": "Regular"
     },
-    {
+	{
       "id": "Settler-2",
       "prototype": "Settler",
       "owner": "player-3",
@@ -61858,6 +61858,7 @@
   "civilizations": [
     {
       "name": "A Barbarian Chiefdom",
+	  "noun": "Barbarians",
       "colorIndex": 0,
       "leaderGender": "male",
       "cityNames": [
@@ -61941,6 +61942,7 @@
     },
     {
       "name": "Rome",
+	  "noun": "Romans",
       "leader": "Caesar",
       "colorIndex": 1,
       "leaderGender": "male",
@@ -61993,6 +61995,7 @@
     },
     {
       "name": "Egypt",
+	  "noun": "Egyptians",
       "leader": "Cleopatra",
       "colorIndex": 3,
       "leaderGender": "female",
@@ -62030,6 +62033,7 @@
     },
     {
       "name": "Greece",
+	  "noun": "Greeks",
       "leader": "Alexander",
       "colorIndex": 10,
       "leaderGender": "male",
@@ -62067,6 +62071,7 @@
     },
     {
       "name": "Babylon",
+	  "noun": "Babylonians",
       "leader": "Hammurabi",
       "colorIndex": 1,
       "leaderGender": "male",
@@ -62102,6 +62107,7 @@
     },
     {
       "name": "Germany",
+	  "noun": "Germans",
       "leader": "Bismarck",
       "colorIndex": 6,
       "leaderGender": "male",
@@ -62126,6 +62132,7 @@
     },
     {
       "name": "Russia",
+	  "noun": "Russians",
       "leader": "Catherine",
       "colorIndex": 9,
       "leaderGender": "female",
@@ -62173,6 +62180,7 @@
     },
     {
       "name": "China",
+	  "noun": "Chinese",
       "leader": "Mao",
       "colorIndex": 5,
       "leaderGender": "male",
@@ -62199,6 +62207,7 @@
     },
     {
       "name": "America",
+	  "noun": "Americans",
       "leader": "Lincoln",
       "colorIndex": 5,
       "leaderGender": "male",
@@ -62247,6 +62256,7 @@
     },
     {
       "name": "Japan",
+	  "noun": "Japanese",
       "leader": "Tokugawa",
       "colorIndex": 4,
       "leaderGender": "male",
@@ -62281,6 +62291,7 @@
     },
     {
       "name": "France",
+	  "noun": "French",
       "leader": "Joan d\u0027Arc",
       "colorIndex": 7,
       "leaderGender": "female",
@@ -62310,6 +62321,7 @@
     },
     {
       "name": "India",
+	  "noun": "Indians",
       "leader": "Gandhi",
       "colorIndex": 8,
       "leaderGender": "male",
@@ -62335,6 +62347,7 @@
     },
     {
       "name": "Persia",
+	  "noun": "Persians",
       "leader": "Xerxes",
       "colorIndex": 10,
       "leaderGender": "male",
@@ -62372,6 +62385,7 @@
     },
     {
       "name": "Aztecs",
+	  "noun": "Aztecs",
       "leader": "Montezuma",
       "colorIndex": 4,
       "leaderGender": "male",
@@ -62416,6 +62430,7 @@
     },
     {
       "name": "Zululand",
+	  "noun": "Zulu",
       "leader": "Shaka",
       "colorIndex": 3,
       "leaderGender": "male",
@@ -62440,6 +62455,7 @@
     },
     {
       "name": "Iroquois",
+	  "noun": "Iroquois",
       "leader": "Hiawatha",
       "colorIndex": 8,
       "leaderGender": "male",
@@ -62477,6 +62493,7 @@
     },
     {
       "name": "England",
+	  "noun": "English",
       "leader": "Elizabeth",
       "colorIndex": 2,
       "leaderGender": "female",
@@ -62514,6 +62531,7 @@
     },
     {
       "name": "Mongols",
+	  "noun": "Mongols",
       "leader": "Temujin",
       "colorIndex": 3,
       "leaderGender": "male",
@@ -62552,6 +62570,7 @@
     },
     {
       "name": "Spain",
+	  "noun": "Spanish",
       "leader": "Isabella",
       "colorIndex": 5,
       "leaderGender": "female",
@@ -62591,6 +62610,7 @@
     },
     {
       "name": "Scandinavia",
+	  "noun": "Vikings",
       "leader": "Ragnar Lodbrok",
       "colorIndex": 8,
       "leaderGender": "male",
@@ -62632,6 +62652,7 @@
     },
     {
       "name": "Ottomans",
+	  "noun": "Ottomans",
       "leader": "Osman",
       "colorIndex": 2,
       "leaderGender": "male",
@@ -62669,6 +62690,7 @@
     },
     {
       "name": "Celts",
+	  "noun": "Celts",
       "leader": "Brennus",
       "colorIndex": 4,
       "leaderGender": "male",
@@ -62707,6 +62729,7 @@
     },
     {
       "name": "Arabia",
+	  "noun": "Arabs",
       "leader": "Abu Bakr",
       "colorIndex": 7,
       "leaderGender": "male",
@@ -62743,6 +62766,7 @@
     },
     {
       "name": "Carthage",
+	  "noun": "Carthaginians",
       "leader": "Hannibal",
       "colorIndex": 9,
       "leaderGender": "male",
@@ -62781,6 +62805,7 @@
     },
     {
       "name": "Korea",
+	  "noun": "Koreans",
       "leader": "Wang Kon",
       "colorIndex": 6,
       "leaderGender": "male",
@@ -62819,6 +62844,7 @@
     },
     {
       "name": "Sumeria",
+	  "noun": "Sumerians",
       "leader": "Gilgamesh",
       "colorIndex": 5,
       "leaderGender": "male",
@@ -62852,6 +62878,7 @@
     },
     {
       "name": "Hittites",
+	  "noun": "Hittites",
       "leader": "Mursilis",
       "colorIndex": 14,
       "leaderGender": "male",
@@ -62885,6 +62912,7 @@
     },
     {
       "name": "Netherlands",
+	  "noun": "Dutch",
       "leader": "William",
       "colorIndex": 2,
       "leaderGender": "male",
@@ -62918,6 +62946,7 @@
     },
     {
       "name": "Portugal",
+	  "noun": "Portugese",
       "leader": "Henry",
       "colorIndex": 8,
       "leaderGender": "male",
@@ -62962,6 +62991,7 @@
     },
     {
       "name": "Byzantines",
+	  "noun": "Byzantines",
       "leader": "Theodora",
       "colorIndex": 11,
       "leaderGender": "female",
@@ -62995,6 +63025,7 @@
     },
     {
       "name": "Inca",
+	  "noun": "Inca",
       "leader": "Pachacuti",
       "colorIndex": 7,
       "leaderGender": "male",
@@ -63028,6 +63059,7 @@
     },
     {
       "name": "Maya",
+	  "noun": "Maya",
       "leader": "Smoke-Jaguar",
       "colorIndex": 6,
       "leaderGender": "male",
