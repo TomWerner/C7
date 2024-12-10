@@ -8,10 +8,6 @@ public partial class CivilizationDestroyed : Popup
 {
 	string civNoun = "";
 
-	//So Godot doesn't print error " Cannot construct temporary MonoObject because the class does not define a parameterless constructor"
-	//Not sure how important that is *shrug*
-	// public CivilizationDestroyed() {}
-
 	public CivilizationDestroyed(Civilization civ)
 	{
 		alignment = BoxContainer.AlignmentMode.End;

@@ -21,7 +21,7 @@ namespace C7GameData
 		}
 		public string name;
 
-		// "Americans" for "America", or "Spanish" for "Spain".
+		// `noun` is "Americans" for "America", or "Spanish" for "Spain", etc.
 		public string noun;
 		public string leader;
 		public int colorIndex;
