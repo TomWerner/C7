@@ -174,6 +174,10 @@ public partial class Game : Node2D {
 
 					// If this was the last city of the civilization, display a popup
 					// noting that the civ is gone and destroy any remaining units.
+					//
+					// TODO: Implement the full set of conditions for destroying a civ;
+					// handling cases like 1 city elimination, regicide, settlers that
+					// are still alive, etc.
 					if (mCD.city.owner.RemainingCities() == 0) {
 						popupOverlay.ShowPopup(new CivilizationDestroyed(mCD.city.owner.civilization), PopupOverlay.PopupCategory.Advisor);
 						for (int i =0; i < mCD.city.owner.units.Count; ++i) {
